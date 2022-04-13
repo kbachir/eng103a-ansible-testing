@@ -1,7 +1,8 @@
 # eng103a ansible sever patching Readme
-The aim of this project was to run tests on services using ansible playbooks, if there were issues found with the services the pipeline would automatically trigger a playbook which would fix the issues. The status of the services being run can be monitored using Grafana and pulling data from the playbook. The diagram below shows the project layout.
+This readme is meant to be used alongside another readme which talks more in detail what the playbooks do.
+
+The aim of this project was to run tests on services using ansible playbooks, if there were issues found with the services the pipeline would automatically trigger a playbook which would fix the issues. The status of the services being run can be monitored using Grafana and pulling data from the playbook. The diagram below shows the project layout. Jenkins is used to automate the patching. 
 ![diagram](https://cdn.discordapp.com/attachments/958316995156267068/963098096433262612/unknown.png)
-Jenkins is used to automate the patching.
 
 ## What is server patching?
 Patching is a process to repair a vulnerability, a flaw that is identified after the release of an application, fix bugs and add new features. 
@@ -19,8 +20,8 @@ Using ansible, as long as we have a file which gives us information on how to co
 ## The playbooks being used
 
 Some of the benefits of ansible include:
-- Simple(relatively) to set up and use
-- Agentless 
-- Efficient
-- Reliable
+- Simple(relatively) to set up and use. Anisble's playbooks require no special coding skill to use.
+- Agentless. No need to install any other software or firewall ports on the client systems you want to automate. You also don't have to set up a separate management structure.
+- Efficient. No extra software needed so there's more room for application resources on your server.
+- Reliable. Executing a playbook can be done one thousand times, and it will always be done the same way.
 
