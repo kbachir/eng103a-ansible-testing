@@ -1,0 +1,38 @@
+# test.yml
+---
+- name: tests
+# name of the host/instance/vm
+  hosts: all
+# admin access to install any dependencies
+  become: yes
+# collect logs or gather facts
+  gather_facts: no
+  tasks:
+    - name: store date output for timezone check
+# Checks the time zone of all the hosts and stores it in a variable check.tz
+      command: date
+      register: check_tz
+
+    - name: check tz
+# Asserts that the variable check.tz is returning UTC in the standard output (stdout)
+      assert:
+        that: "'UTC' in check_tz.stdout"
+
+    - name: "Check if NGINX is installed"
+      package_facts:
+        manager: "auto"
+
+    - name: confirm nginx is installed
+# Asserts that nginx is in the list of all available packages
+      assert:
+        that: "'nginx' in ansible_facts.packages"
+
+    - name: Check if port 80 is listening
+# Checks for all the ports listening and stores it in the variable port_check
+      shell: lsof -i -P -n | grep LISTEN
+      register: port_check
+
+    - name: confirm port 80 is listening
+# Asserts that the variable port_check is returning port 80 in the standard output (stdout)
+      assert:
+        that: "'*:80 (LISTEN)' in port_check.stdout"

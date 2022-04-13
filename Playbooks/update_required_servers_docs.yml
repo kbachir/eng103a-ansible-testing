@@ -1,0 +1,15 @@
+---
+# name of the host/instance/vm
+- hosts: all
+# admin access to install any dependencies
+  become: true
+  tasks:
+# only update Ubuntu servers
+  - name: Update Ubuntu
+    apt: update_cache=yes upgrade=dist
+    when: ansible_distribution == "Ubuntu"
+
+# only update RedHat Servers
+  - name: Update RedHat
+    apt: name=* update_cache=yes
+    when: ansible_os_family == "RedHat"

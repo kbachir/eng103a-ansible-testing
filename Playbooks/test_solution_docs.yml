@@ -1,0 +1,24 @@
+- name: tests
+# name of the host/instance/vm
+  hosts: all
+# admin access to install any dependencies
+  become: yes
+# collect logs or gather facts
+  gather_facts: no
+  tasks:
+    - name: set timezone to CEST
+# Setting time zone to UTC
+      timezone:
+        name: UTC
+
+    - name: install nginx
+# Installing nginx
+      apt:
+        pkg: nginx
+        state: present
+
+    - name: start nginx
+# Start nginx service
+      service:
+        name: nginx
+        state: started

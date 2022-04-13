@@ -1,0 +1,14 @@
+# name of the host/instance/vm
+- hosts: all
+# admin access to install any dependencies
+  become: true
+# collect logs or gather facts
+  gather_facts: yes
+  tasks:
+  - name: "Get service facts"
+# Gathers service state information of all the available services as fact data
+    service_facts:
+  - name: "Check the service facts as they are"
+# Displays the state of all the available services on the console 
+    debug:
+      msg: "{{ansible_facts.services}}"

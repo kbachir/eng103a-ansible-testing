@@ -1,0 +1,20 @@
+# os_required_patching.yml
+# name of the host/instance/vm
+- hosts: all
+# collect logs or gather facts
+  gather_facts: true
+# admin access to install any dependencies
+  become: true
+  tasks:
+  - name: run apt-get
+# Installs tree only when the servers are ubuntu 
+    command: apt install tree -y
+    when: ansible_distribution == "Ubuntu"
+  - name: run yum update
+# Runs update only for servers which are centOS
+    command: yum update
+    when: ansible_distribution == "CentOS"
+  - name: run yum
+# Installs tree only for the servers that are centOS
+    command: yum install tree -y
+    when: ansible_distribution == "CentOS"

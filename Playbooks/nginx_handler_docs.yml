@@ -1,0 +1,23 @@
+---
+# name of the host/instance/vm
+- hosts: web
+  tasks:
+  - name: Install nginx
+# Installs nginx and asserts its state to be present
+    package:
+      name: nginx
+      state: present
+    notify:
+# Triggers the handler 
+    - Start nginx
+  - name: ensure Nginx is running
+# Checks if nginx is running and in the started state
+    service:
+      name: nginx
+      state: started
+  handlers:
+# Starts nginx service. Performed at the end of the play once all other tasks are finished
+    - name: Start nginx
+      service:
+        name: nginx
+        state: started
