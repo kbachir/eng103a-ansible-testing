@@ -24,10 +24,3 @@ Some of the benefits of ansible include:
 - Efficient
 - Reliable
 
-There are three Yaml playbooks that we need to discuss. 
-
-- Firstly, `test.yml` runs the initial tests on the agent instances. It checks the time zone and confirms that it is UTC. It checks whether nginx is installed, and finally it confirms that it is listening on port 80.
-
-- `test_solution.yml` is used to correct any issues on the agent instances, it will set the time zone to UTC, install and start nginx.
-
-- `test_svc.yml` is used to gather written information about the instances. It will check whether nginx is running, then depending on that it will send a message saying that it's running as expected or nginx is down.
