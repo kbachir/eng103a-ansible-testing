@@ -4,7 +4,7 @@ The aim of this project was to run tests on services using ansible playbooks, if
 Jenkins is used to automate the patching.
 
 ## What is server patching?
-Patching is a process to repair a vulnerability or a flaw that is identified after the release of an application or a software. In the case of servers, it means making sure that they have their services running and have the latest version.
+Patching is a process to repair a vulnerability, a flaw that is identified after the release of an application, fix bugs and add new features. 
 
 ## What is server drift?
 Server drift (also known as configuration drift) happens when make modifications on a system over time the configuration of the system changes. Theses changes could be very minor but over time the system will change. 
