@@ -36,8 +36,9 @@ Some of the benefits of ansible include:
 - Efficient. No extra software needed so there's more room for application resources on your server.
 - Reliable. Executing a playbook can be done one thousand times, and it will always be done the same way. 
 
-## Setup 
-Follow these steps to get the following services we used up and running. Disclaimer: some of these commands might be updated, so double check with the official documentation. The operating system was Ubuntu on the instances (version 18.04). The virtual machines were all also hosted on AWS.
+## Setup
+### Installation
+Follow these steps to get the following services we used. Disclaimer: some of these commands might be updated, so double check with the official documentation. The operating system was Ubuntu on the instances (version 18.04). The virtual machines were all also hosted on AWS and made in a T2.medium.
 ### Jenkins
 To set up Jenkins go into a Linux instance and run the following commands:
 - `sudo apt update && sudo apt upgrade -y` Updates and upgrades the instance. Also used to check whether there is internet access in the instance
@@ -46,9 +47,26 @@ To set up Jenkins go into a Linux instance and run the following commands:
 - `wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -` This imports the GPG keys of the Jenkins repository.
 - `sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'` This adds the Jenkins repository to the system.
 - `sudo apt install jenkins` To install the latest version of Jenkins.
-- `systemctl status jenkins` To display the status of Jenkins. It should display
+- `systemctl status jenkins` To display the status of Jenkins. It should display the following, with different dates, time, etc.
+![diagram](https://cdn.discordapp.com/attachments/958316995156267068/964180361984741416/unknown.png)
+- The firewall on your instance needs to be adjusted in order to allow Jenkins to work. In the case of AWS you need to change the security groups to allow for port `8080` access.
+- In your browser, type your domain IP followed by port `8080`, in the format `http://your_ip_or_domain:8080`. This should take you to an unlock Jenkins page which looks like this:
+![diagram](https://linuxize.com/post/how-to-install-jenkins-on-ubuntu-18-04/unlock-jenkins_huff7c186b4c9370e26f4ba03e0bde0db7_51753_768x0_resize_q75_lanczos.jpg)
+- Type `sudo cat /var/lib/jenkins/secrets/initialAdminPassword` into the terminal and put the output into the password box.
+- Time to install some plugins.Plugins needed are all the default plugins, ansible, parameterised trigger plugin, and dashboard view. Once you click install, it will take some time to install all the needed plugins. Once it's done click `save and continue`.
+- The page will prompt you to create a Admin user, once this is done continue, copy the Jenkins URL and click `save and finish`.
+- Jenkins is now ready, click on `start using jenkins` to go to the jenkins dashboard.
 
-Plugins needed are all the default plugins, ansible, parameterised trigger plugin, and dashboard view.
 ### Grafana
-
+To set up Grafana on the linux instance, follow the steps below.
+- If it's a new instance make sure you use `sudo apt update && sudo apt upgrade -y`.
+- `wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -` To download the Grafana GPG key and pipe the output.
+- `sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"` To add the Grafana repository to your APT sources.
+- `apt-cache policy grafana` This will show the version of grafana you are going to install. It should look like:
+![diagram](https://cdn.discordapp.com/attachments/814569440511262800/964192491828047942/unknown.png)
+- `sudo apt install grafana` This will install grafana
+- `sudo systemctl start grafana-server` to start the grafana server
+- `sudo systemctl status grafana-server` Display the status of the grafana server
+- `sudo systemctl enable grafana-server` This enables the service to automatically start Grafana on boot
+- Navigate to `https://your_domain`
 ### Prometheus
