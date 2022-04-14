@@ -3,6 +3,7 @@ This readme is meant to be used alongside another readme which talks more in det
 
 The aim of this project was to run tests on services using ansible playbooks, if there were issues found with the services the pipeline would automatically trigger a playbook which would fix the issues. The status of the services being run can be monitored using Grafana and pulling data from the playbook. The diagram below shows the project layout. Jenkins is used to automate the patching. 
 ![diagram](https://cdn.discordapp.com/attachments/958316995156267068/963098096433262612/unknown.png)
+The diagram below shows the flow of the Jenkins jobs. You start with pulling the code from the the dev branch, then you run the `test.yml` playbook, this will run some tests. If the instance passes the tests, then it merges with main. If it fails the test then Jenkins will run the `test_solution.yml` playbook, this will fix the instance, then it will be merged with main. After it is merged with main the playbook `svc.yml` will be run. This will return written output of the services status, which will be pulled by Grafana and used in logs.
 ![diagram](https://media.discordapp.net/attachments/938459479270359051/963759752381345822/Jenkins_Jobs.png?width=960&height=540)
 ## What is server patching?
 Patching is a process to repair a vulnerability, a flaw that is identified after the release of an application, fix bugs and add new features. 
