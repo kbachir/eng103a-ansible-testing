@@ -118,7 +118,10 @@ scrape_configs:
   - job_name: 'prometheus'
     scrape_interval: 5s
     static_configs:
-      - targets: ['Your_IP:9090']
+      - targets: ['localhost:9090']
+  - job_name: "agent"
+    static_configs:
+      - targets: ["agent_IP:9100"]
 ```
 `sudo chown prometheus:prometheus /etc/prometheus/prometheus.yml` To change the ownership of the file to prometheus user.
 
@@ -146,3 +149,4 @@ WantedBy=multi-user.target
 - `sudo systemctl daemon-reload` and `sudo systemctl start prometheus` To reload the systemd service to register the prometheus service and start the prometheus service.
 - `sudo systemctl status prometheus` to check the status of prometheus.
 - Now you should be able to access the prometheus UI by going to `http://<prometheus-ip>:9090/graph`.
+  
