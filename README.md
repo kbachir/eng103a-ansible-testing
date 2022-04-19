@@ -78,17 +78,29 @@ To set up Grafana on the linux instance, follow the steps below.
 - `mv prometheus-2.22.0.linux-amd64 prometheus-files` Rename the extracted folder to prometheus-files
 - Create a prometheus user, required directories and make Prometheus the user as the owner of those directories
 ``sudo useradd --no-create-home --shell /bin/false prometheus``
+
 ``sudo mkdir /etc/prometheus``
+
 ``sudo mkdir /var/lib/prometheus``
+
 ``sudo chown prometheus:prometheus /etc/prometheus``
+
 ``sudo chown prometheus:prometheus /var/lib/prometheus``
+
 - Copy prometheus and promtool binary from prometheus-files folder to /usr/local/bin and change the ownership to prometheus user.
 ``sudo cp prometheus-files/prometheus /usr/local/bin/``
+
 ``sudo cp prometheus-files/promtool /usr/local/bin/``
+
 ``sudo chown prometheus:prometheus /usr/local/bin/prometheus``
+
 ``sudo chown prometheus:prometheus /usr/local/bin/promtool``
+
 - Move the consoles and console_libraries directories from prometheus-files to /etc/prometheus folder and change the ownership to prometheus user.
 ``sudo cp -r prometheus-files/consoles /etc/prometheus``
+
 ``sudo cp -r prometheus-files/console_libraries /etc/prometheus``
+
 ``sudo chown -R prometheus:prometheus /etc/prometheus/consoles``
+
 ``sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries``
