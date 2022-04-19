@@ -88,6 +88,7 @@ To set up Grafana on the linux instance, follow the steps below.
 ``sudo chown prometheus:prometheus /var/lib/prometheus``
 
 - Copy prometheus and promtool binary from prometheus-files folder to /usr/local/bin and change the ownership to prometheus user.
+
 ``sudo cp prometheus-files/prometheus /usr/local/bin/``
 
 ``sudo cp prometheus-files/promtool /usr/local/bin/``
@@ -97,6 +98,7 @@ To set up Grafana on the linux instance, follow the steps below.
 ``sudo chown prometheus:prometheus /usr/local/bin/promtool``
 
 - Move the consoles and console_libraries directories from prometheus-files to /etc/prometheus folder and change the ownership to prometheus user.
+
 ``sudo cp -r prometheus-files/consoles /etc/prometheus``
 
 ``sudo cp -r prometheus-files/console_libraries /etc/prometheus``
@@ -104,3 +106,43 @@ To set up Grafana on the linux instance, follow the steps below.
 ``sudo chown -R prometheus:prometheus /etc/prometheus/consoles``
 
 ``sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries``
+
+All the prometheus configurations should be present in /etc/prometheus/prometheus.yml file.
+
+- `sudo nano /etc/prometheus/prometheus.yml`  To create the yml file, and put the content below into it. Save it when you're done.
+```
+global:
+  scrape_interval: 10s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['Your_IP:9090']
+```
+`sudo chown prometheus:prometheus /etc/prometheus/prometheus.yml` To change the ownership of the file to prometheus user.
+
+- `sudo nano /etc/systemd/system/prometheus.service` To create a prometheus service file. Put the content below into the file.
+
+```
+[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/usr/local/bin/prometheus \
+    --config.file /etc/prometheus/prometheus.yml \
+    --storage.tsdb.path /var/lib/prometheus/ \
+    --web.console.templates=/etc/prometheus/consoles \
+    --web.console.libraries=/etc/prometheus/console_libraries
+
+[Install]
+WantedBy=multi-user.target
+```
+- `sudo systemctl daemon-reload` and `sudo systemctl start prometheus` To reload the systemd service to register the prometheus service and start the prometheus service.
+- `sudo systemctl status prometheus` to check the status of prometheus.
+- Now you should be able to access the prometheus UI by going to `http://<prometheus-ip>:9090/graph`.
