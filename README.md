@@ -64,9 +64,31 @@ To set up Grafana on the linux instance, follow the steps below.
 - `sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"` To add the Grafana repository to your APT sources.
 - `apt-cache policy grafana` This will show the version of grafana you are going to install. It should look like:
 ![diagram](https://cdn.discordapp.com/attachments/814569440511262800/964192491828047942/unknown.png)
-- `sudo apt install grafana` This will install grafana
-- `sudo systemctl start grafana-server` to start the grafana server
+- `sudo apt install grafana` This will install Grafana
+- `sudo systemctl start grafana-server` to start the Grafana server
 - `sudo systemctl status grafana-server` Display the status of the grafana server
 - `sudo systemctl enable grafana-server` This enables the service to automatically start Grafana on boot
-- Navigate to `https://your_domain`
+- Navigate to `https://your_domain_IP:3000`, your domain IP will be the IP of the instance or your localhost depending on how you are setting up Grafana.This should display a page with the Grafana name and logo, an email/username, and password form. It should look like the image below.
+![diagram](https://assets.digitalocean.com/articles/66778/Grafana_Login.png)
+- Enter `admin` into the username and password fields and click login. This will lead to a page where you will need to make a more secure password. Once this is done you will be brought to the grafana home dashboard.
 ### Prometheus
+- `sudo apt update && sudo apt upgrade -y` 
+- `curl -LO url -LO https://github.com/prometheus/prometheus/releases/download/v2.22.0/prometheus-2.22.0.linux-amd64.tar.gz` To download the Prometheus GPG key
+- `tar -xvf prometheus-2.22.0.linux-amd64.tar.gz` To extract from the download and create a new directory
+- `mv prometheus-2.22.0.linux-amd64 prometheus-files` Rename the extracted folder to prometheus-files
+- Create a prometheus user, required directories and make Prometheus the user as the owner of those directories
+``sudo useradd --no-create-home --shell /bin/false prometheus``
+``sudo mkdir /etc/prometheus``
+``sudo mkdir /var/lib/prometheus``
+``sudo chown prometheus:prometheus /etc/prometheus``
+``sudo chown prometheus:prometheus /var/lib/prometheus``
+- Copy prometheus and promtool binary from prometheus-files folder to /usr/local/bin and change the ownership to prometheus user.
+``sudo cp prometheus-files/prometheus /usr/local/bin/``
+``sudo cp prometheus-files/promtool /usr/local/bin/``
+``sudo chown prometheus:prometheus /usr/local/bin/prometheus``
+``sudo chown prometheus:prometheus /usr/local/bin/promtool``
+- Move the consoles and console_libraries directories from prometheus-files to /etc/prometheus folder and change the ownership to prometheus user.
+``sudo cp -r prometheus-files/consoles /etc/prometheus``
+``sudo cp -r prometheus-files/console_libraries /etc/prometheus``
+``sudo chown -R prometheus:prometheus /etc/prometheus/consoles``
+``sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries``
