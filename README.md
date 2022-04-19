@@ -36,8 +36,7 @@ Some of the benefits of ansible include:
 - Efficient. No extra software needed so there's more room for application resources on your server.
 - Reliable. Executing a playbook can be done one thousand times, and it will always be done the same way. 
 
-## Setup
-### Installation
+## Installation and setup
 Follow these steps to get the following services we used. Disclaimer: some of these commands might be updated, so double check with the official documentation. The operating system was Ubuntu on the instances (version 18.04). The virtual machines were all also hosted on AWS and made in a T2.medium.
 ### Jenkins
 To set up Jenkins go into a Linux instance and run the following commands:
@@ -71,6 +70,7 @@ To set up Grafana on the linux instance, follow the steps below.
 - Navigate to `https://your_domain_IP:3000`, your domain IP will be the IP of the instance or your localhost depending on how you are setting up Grafana.This should display a page with the Grafana name and logo, an email/username, and password form. It should look like the image below.
 ![diagram](https://assets.digitalocean.com/articles/66778/Grafana_Login.png)
 - Enter `admin` into the username and password fields and click login. This will lead to a page where you will need to make a more secure password. Once this is done you will be brought to the grafana home dashboard.
+- In order to monitor the instance you need to monitor Prometheus. So slick on the `cogwheel` on the grafana dashboard. Click on `data sources`. Click on `add data source`. Select prometheus as the type. Set the appropriate Prometheus server URL, if you have it running on the same instance do `http://localhost:9090` otherwise put in the instance IP with the correct port.Access method   . Click save and test to save the new data source.
 ### Prometheus
 - `sudo apt update && sudo apt upgrade -y` 
 - `curl -LO url -LO https://github.com/prometheus/prometheus/releases/download/v2.22.0/prometheus-2.22.0.linux-amd64.tar.gz` To download the Prometheus GPG key
@@ -109,7 +109,7 @@ To set up Grafana on the linux instance, follow the steps below.
 
 All the prometheus configurations should be present in /etc/prometheus/prometheus.yml file.
 
-- `sudo nano /etc/prometheus/prometheus.yml`  To create the yml file, and put the content below into it. Save it when you're done.
+- `sudo nano /etc/prometheus/prometheus.yml`  To create the yml file, and put the content below into it. The agent ip should be in the agent target. Save it when you're done.
 ```
 global:
   scrape_interval: 10s
@@ -149,4 +149,5 @@ WantedBy=multi-user.target
 - `sudo systemctl daemon-reload` and `sudo systemctl start prometheus` To reload the systemd service to register the prometheus service and start the prometheus service.
 - `sudo systemctl status prometheus` to check the status of prometheus.
 - Now you should be able to access the prometheus UI by going to `http://<prometheus-ip>:9090/graph`.
-  
+
+On prometheus make sure the connection with the agent is up on targets.
