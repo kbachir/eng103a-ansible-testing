@@ -1,0 +1,23 @@
+- hosts: web
+  become: yes
+  tasks:
+  - name: install stress test
+    apt:
+      pkg:
+        stress
+
+  - name: "Check if stress is installed"
+    package_facts:
+       manager: "auto"
+  - name: confirm stress is installed
+    assert:
+      that: "'stress' in ansible_facts.packages"
+  - name: "Stress test CPU for 10s"
+    shell:
+      stress --cpu 2 --timeout 10s
+    register: stresstest
+  - name:
+    debug:
+      msg: "{{ stresstest }}"
+
+- import_playbook: cpu_test.yml

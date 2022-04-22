@@ -1,0 +1,16 @@
+---
+-  hosts: web
+   become: yes
+   tasks:
+     - name: "Checking idle utilization rate"
+       shell: |
+         mpstat -u 1 1|tail -1| awk '{print $NF}'
+       register: cpu
+     - name: "print idle utilization rate"
+       debug:
+         msg: "{{ cpu }}"
+     - name: 'checking if idle utilization is above 50%'
+       assert:
+         that: cpu.stdout | int > 50
+         fail_msg: "Over 50% of CPU power is being utilized."
+         success_msg: "Over 50% of CPU utilization is idle."
