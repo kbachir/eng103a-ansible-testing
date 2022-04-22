@@ -151,3 +151,5 @@ WantedBy=multi-user.target
 - Now you should be able to access the prometheus UI by going to `http://<prometheus-ip>:9090/graph`.
 
 On prometheus make sure the connection with the agent is up on targets.
+
+`100 - (avg(irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)` Query we used in Grafana to visualise prometheus metric for CPU saturation
